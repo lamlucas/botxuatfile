@@ -1,0 +1,5 @@
+{
+  "worker_url": "https://ads-report-monitor.YOUR_SUBDOMAIN.workers.dev",
+  "webhook_secret": "WEBHOOK_SECRET_CUA_BAN",
+  "report_file": "C:\\path\\to\\report.xlsx"
+}
