@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Ads Monitor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: { 900: '#0f1419', 800: '#1a2332', 700: '#243044', 600: '#2d3d52' },
+            accent: { DEFAULT: '#3b82f6', hover: '#2563eb' },
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="h-full bg-surface-900 text-gray-100">
+  <div class="flex h-full min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-56 bg-surface-800 border-r border-surface-700 flex flex-col shrink-0">
+      <div class="p-5 border-b border-surface-700">
+        <h1 class="font-bold text-lg">Ads Monitor</h1>
+        <p class="text-xs text-gray-500 mt-0.5">Google Ads Reports</p>
+      </div>
+      <nav class="flex-1 p-3 space-y-1">
+        <button data-page="dashboard" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium bg-accent/20 text-accent">
+          Dashboard
+        </button>
+        <button data-page="config" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-surface-700 hover:text-gray-200">
+          Config
+        </button>
+        <button data-page="logs" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-surface-700 hover:text-gray-200">
+          Logs
+        </button>
+      </nav>
+      <div class="p-3 border-t border-surface-700">
+        <button id="logoutBtn" class="w-full px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-500/10">
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 overflow-auto p-6 lg:p-8">
+      <!-- Dashboard page -->
+      <section id="page-dashboard" class="page">
+        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          <div class="bg-surface-800 border border-surface-700 rounded-xl p-5">
+            <p class="text-gray-400 text-sm">Tổng lần check</p>
+            <p id="stat-checks" class="text-3xl font-bold mt-1">—</p>
+          </div>
+          <div class="bg-surface-800 border border-surface-700 rounded-xl p-5">
+            <p class="text-gray-400 text-sm">Account bị back (tổng)</p>
+            <p id="stat-missing" class="text-3xl font-bold mt-1 text-red-400">—</p>
+          </div>
+          <div class="bg-surface-800 border border-surface-700 rounded-xl p-5">
+            <p class="text-gray-400 text-sm">Campaign mới (tổng)</p>
+            <p id="stat-campaigns" class="text-3xl font-bold mt-1 text-amber-400">—</p>
+          </div>
+          <div class="bg-surface-800 border border-surface-700 rounded-xl p-5">
+            <p class="text-gray-400 text-sm">Files trong history</p>
+            <p id="stat-files" class="text-3xl font-bold mt-1">—</p>
+          </div>
+        </div>
+        <div class="bg-surface-800 border border-surface-700 rounded-xl p-6">
+          <h3 class="font-semibold mb-4">Lần check gần nhất</h3>
+          <div id="latest-check" class="text-gray-400 text-sm space-y-2">Đang tải...</div>
+        </div>
+      </section>
+
+      <!-- Config page -->
+      <section id="page-config" class="page hidden">
+        <h2 class="text-2xl font-bold mb-6">Config</h2>
+        <form id="configForm" class="max-w-2xl space-y-8">
+          <fieldset class="bg-surface-800 border border-surface-700 rounded-xl p-6 space-y-4">
+            <legend class="font-semibold px-2">File gốc tài khoản (baseline_account.xlsx)</legend>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Upload XLSX</label>
+              <input type="file" id="fileAccount" accept=".xlsx,.xls" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent file:text-white" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Hoặc R2 key</label>
+              <input type="text" id="keyAccount" placeholder="baseline/baseline_account.xlsx"
+                class="w-full px-4 py-2 rounded-lg bg-surface-900 border border-surface-700" />
+            </div>
+            <button type="button" id="uploadAccount" class="text-sm text-accent hover:underline">Upload account baseline</button>
+          </fieldset>
+
+          <fieldset class="bg-surface-800 border border-surface-700 rounded-xl p-6 space-y-4">
+            <legend class="font-semibold px-2">File gốc chiến dịch (baseline_campaign.xlsx)</legend>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Upload XLSX</label>
+              <input type="file" id="fileCampaign" accept=".xlsx,.xls" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent file:text-white" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Hoặc R2 key</label>
+              <input type="text" id="keyCampaign" placeholder="baseline/baseline_campaign.xlsx"
+                class="w-full px-4 py-2 rounded-lg bg-surface-900 border border-surface-700" />
+            </div>
+            <button type="button" id="uploadCampaign" class="text-sm text-accent hover:underline">Upload campaign baseline</button>
+          </fieldset>
+
+          <fieldset class="bg-surface-800 border border-surface-700 rounded-xl p-6">
+            <legend class="font-semibold px-2 mb-4">Telegram cảnh báo</legend>
+            <div id="telegramInfo" class="text-sm text-gray-400 space-y-2">
+              <p>Đang tải...</p>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">
+              Cấu hình <code class="text-accent">TELEGRAM_BOT_TOKEN</code> qua Wrangler secret.
+              Bot phải được thêm vào nhóm trước khi gửi được tin.
+            </p>
+          </fieldset>
+
+          <p id="configMsg" class="text-sm hidden"></p>
+          <button type="submit" class="px-6 py-2.5 rounded-lg bg-accent hover:bg-accent-hover font-semibold">
+            Save Config
+          </button>
+        </form>
+      </section>
+
+      <!-- Logs page -->
+      <section id="page-logs" class="page hidden">
+        <h2 class="text-2xl font-bold mb-6">Logs</h2>
+        <div class="overflow-x-auto rounded-xl border border-surface-700">
+          <table class="w-full text-sm">
+            <thead class="bg-surface-800 text-gray-400">
+              <tr>
+                <th class="text-left p-3">Thời gian</th>
+                <th class="text-left p-3">File key</th>
+                <th class="text-right p-3">Accounts</th>
+                <th class="text-right p-3">Campaigns</th>
+                <th class="text-right p-3">Back</th>
+                <th class="text-right p-3">Mới</th>
+                <th class="text-left p-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="logsBody" class="divide-y divide-surface-700 bg-surface-900/50">
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
