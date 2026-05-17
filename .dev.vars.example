@@ -1,5 +1,0 @@
-ADMIN_PASSWORD=your-secure-password
-JWT_SECRET=random-long-secret-min-32-chars
-WEBHOOK_SECRET=webhook-secret-for-external-tool
-TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
-TELEGRAM_CHAT_ID=-1003956302215
