@@ -1,0 +1,38 @@
+name = "botxuatfile"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[vars]
+TELEGRAM_CHAT_ID = "-1003956302215"
+# Secrets: ADMIN_PASSWORD, JWT_SECRET, WEBHOOK_SECRET, TELEGRAM_BOT_TOKEN
+
+[[kv_namespaces]]
+binding = "KV"
+id = "7be13716634f4c5c867a69cf43292987"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ads-monitor-db"
+database_id = "f053bd69-0dd7-4a1c-ad69-067c00b16f37"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "reports"
+
+[[queues.producers]]
+binding = "ALERT_QUEUE"
+queue = "ads-alert-queue"
+
+[[queues.consumers]]
+queue = "ads-alert-queue"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 5
+
+[observability]
+enabled = true
